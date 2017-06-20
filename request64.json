@@ -1,0 +1,15 @@
+{
+    "requests": [
+        {
+            "image": {
+                "content":  "BASE64"
+            },
+            "features": [
+                {
+                    "type": "TYPE",
+                    "maxResults": 15
+                }
+            ]
+        }
+    ]
+}
