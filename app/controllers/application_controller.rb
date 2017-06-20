@@ -2,6 +2,8 @@ require "faraday"
 require "json"
 require "pp"
 require "base64"
+require "open-uri"
+# require "FileUtils"
 
 class ApplicationController
 
@@ -9,13 +11,38 @@ class ApplicationController
    render html: "hello, world!"
   end
 
+  def save_image(url)
+  # ready filepath
+  fileName = File.basename(url)
+  dirName = "/Users/Kazuya/Documents/Work/Bootcamp/Client/ruby_client/api-client-test/"
+  filePath = dirName + fileName
+
+  # create folder if not exist
+  FileUtils.mkdir_p(dirName) unless FileTest.exist?(dirName)
+
+  # write image adata
+    open(filePath, 'wb') do |output|
+      open(url) do |data|
+        output.write(data.read)
+      end
+    end
+    return fileName
+  end
+
   def gclVision
+
+    ##########################################
+    # 画像ファイルの保存
+    ##########################################
+
+    imageurl = "http://vps6-d.kuku.lu/files/20170616-0050_6baabbbbcaad400ad3b80504f305985f.jpg"
+    imagepath = save_image(imageurl)
 
     ##########################################
     # 画像ファイルのBase64化
     ##########################################
 
-    original = File.open("sample.png", "r+b") # 読み込み
+    original = File.open(imagepath, "r+b") # 読み込み
     readimage = Base64.strict_encode64(original.read)
     original.close
 
@@ -25,7 +52,7 @@ class ApplicationController
     # jsonの作成
     ##########################################
 
-    featuretype = 'TEXT_DETECTION'
+    featuretype = 'LABEL_DETECTION'
 
     json_file_path = 'request64.json'
 
@@ -85,5 +112,7 @@ end
 p "---------------------------------------------"
 ac = ApplicationController.new
 ac.gclVision
-
+# imageurl = "http://vps6-d.kuku.lu/files/20170616-0050_6baabbbbcaad400ad3b80504f305985f.jpg"
+# text = ac.save_image(imageurl)
+# puts text
 p "---------------------------------------------"
