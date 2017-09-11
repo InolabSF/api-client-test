@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title Blog
+
+
+  body
+
+
+      - @entries.each do |entry|
+        hr style="border:0;border-top:medium solid transparent;background-color:black;"
+        - if entry.username
+          p user_id : #{entry.user_id} name : #{entry.username}
+        h1 #{entry.title}
+        p #{entry.content}
+        - if entry.source_article
+          p Source
+          p #{entry.source_article.title}
+          a href="URL" #{entry.source_article.url}
+
+
+        - if entry.feature_image
+            img src="#{entry.feature_image.url}"
+
+        - entry.comments.each do |comment|
+          p #{comment.text}
+        hr style="border:0;border-top:medium solid transparent;background-color:black;"

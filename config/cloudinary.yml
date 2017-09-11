@@ -1,0 +1,8 @@
+production:
+  cloud_name: "dfa9u6mgh"
+  api_key: "114382688487693"
+  api_secret: "rOl-A08YHT2FDhoS_oAfeC7Fmfg"
+development:
+  cloud_name: "dfa9u6mgh"
+  api_key: "114382688487693"
+  api_secret: "rOl-A08YHT2FDhoS_oAfeC7Fmfg"

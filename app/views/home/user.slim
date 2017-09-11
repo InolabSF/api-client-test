@@ -1,0 +1,22 @@
+doctype html
+html
+  head
+    title Blog's User
+
+
+  body
+
+
+      - @users.each do |user|
+        hr style="border:0;border-top:medium solid transparent;background-color:brown;"
+        p id:#{user.id} Email:#{user.email}
+        h1 #{user.name}
+
+
+        - user.entries.each do |entry|
+          hr style="border:0;border-top:medium solid transparent;background-color:black;"
+          p #{entry.updated_at}
+          p #{entry.title}
+          p #{entry.content}
+
+        hr style="border:0;border-top:medium solid transparent;background-color:brown;"
