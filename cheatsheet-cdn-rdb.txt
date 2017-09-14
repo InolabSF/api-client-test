@@ -4,18 +4,18 @@
 
 
 # 新しいプロジェクトの作成
-rails new board
-cd board
+$ rails new board
+$ cd board
 
 # アプリケーションデータモデルの作成
-rails g model Entry title:string content:string
-rake db:migrate
+$ rails g model Entry title:string content:string
+$ rake db:migrate
 
 # コントローラーの作成
-rails g controller Home
+$ rails g controller Home
 
   # config/routes.rb の設定
-  vim config/routes.rb
+$  vim config/routes.rb
     # getでentryがきた場合はhomeのget_entryメソッドにわたす
 	  # 「get 'entry', :to => 'home#get_entry'」の記述
 
@@ -47,7 +47,7 @@ rails g controller Home
     #         p content
 
 # ローカルサーバーを立ち上げる
-rails s
+$ rails s
 # get型のHTTPリクエストを「http://localhost:3000/entry」に要求した場合の挙動を確認する
 
   # config/routes.rb の設定
@@ -77,7 +77,7 @@ rails s
     # end
 
 # ローカルサーバーを立ち上げる
-rails s
+$ rails s
 # Post型のHTTPリクエストを「http://localhost:3000/entry」送信した場合の挙動を確認する
 
 #  app/controllers/home_controller.rb のget_entry　の再定義
@@ -108,44 +108,46 @@ rails s
 # RDB　作成手順
 ########################################################################
 
-rails g model User name:string email:string
+#モデルの作成
 
-rake db:migrate
+$ rails g model User name:string email:string
+$ rails g model Comment entry_id:integer text:string
+など
 
-rails g migration AddUserRefToEntries user:references
+$ rake db:migrate
 
-rake db:migrate
+$ rails g migration AddUserRefToEntries user:references
 
-# entry.rbの拡張
+$ rake db:migrate
+
+# entry.rbの拡張 (親子関係の記述)
 
  # class Entry < ApplicationRecord
+ #   has_many :comments, dependent: :destroy
+ #   has_one :feature_image, dependent: :destroy
  #   belongs_to :user
+ #   has_one :source_article, dependent: :destroy
  # end
 
-# user.rbの拡張
+# user.rbの拡張 (親子関係の記述)
 
  # class User < ApplicationRecord
  #    validates_presence_of :name
  #    has_many :entries, dependent: :destroy
  #  end
 
- # entry.rbの拡張
+ ##comment.rb
 
-  # class Entry < ApplicationRecord
-  #   has_one :feature_image, dependent: :destroy
-  # end
+ # class Comment < ApplicationRecord
+ #   validates_presence_of :entry_id, :text
+ #   belongs_to :entry #単数形でかく
+ # end
 
- # feature_image.rbの拡張
-
-   # class FeatureImage < ApplicationRecord
-   #   validates_presence_of :url
-   #   mount_uploader :url, FeatureImageUploader
-   #   belongs_to :entry
-   # end
 
  # config/routes.rb の設定
  vim config/routes.rb
    # post 'user', :to => 'home#post_user'
+
 
 
 # entry.slim」の拡張
@@ -158,3 +160,28 @@ rake db:migrate
  #
  #      - entry.comments.each do |comment|
  #        p #{comment.text}
+
+
+
+
+### Cloudinary
+
+# 画像のためのモデルを作成する
+
+$ rails g uploader FeatureImage
+$ rails g model FeatureImage entry_id:integer url:string
+$ rake db:migrate
+
+  #feature_image.rbに親子関係を記述する
+
+  #class FeatureImage < ApplicationRecord
+  #  validates_presence_of :url
+  #  mount_uploader :url, FeatureImageUploader
+  #  belongs_to :entry
+  #end
+
+
+# cloudinary.yamlファイルの設定 (api_keyなど)
+
+# gemfileを設定した場合はサーバーを動かす前にbundle installを忘れずに
+$ bundle install
